@@ -1,24 +1,37 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Circle } from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import MapView, { Circle, Marker } from "react-native-maps";
+import { StyleSheet, View, Dimensions } from "react-native";
 
 import * as Location from "expo-location";
 
+const initialParkingLots: any[] = [
+	{
+		id: 0,
+		name: "Kurfürstengarage",
+		latitude: 49.441433,
+		longitude: 11.860592,
+	},
+	{
+		id: 1,
+		name: "Theatergarage",
+		latitude: 49.446496,
+		longitude: 11.854837,
+	},
+];
+
 export default function MapScreen() {
-	const [location, setLocation] = useState(null);
-	const [errorMsg, setErrorMsg] = useState(null);
+	const [location, setLocation] = useState<any>(null);
+	const [errorMsg, setErrorMsg] = useState<any>(null);
 
 	useEffect(() => {
 		(async () => {
 			let { status } = await Location.requestForegroundPermissionsAsync();
 			if (status !== "granted") {
 				setErrorMsg("Permission to access location was denied");
-				console.log(errorMsg);
 				return;
 			}
 
 			let location = await Location.getCurrentPositionAsync({});
-			console.warn(location);
 			setLocation(location);
 		})();
 	}, []);
@@ -36,8 +49,12 @@ export default function MapScreen() {
 				showsUserLocation
 				showsCompass
 				showsScale
-			/>
-			<Circle center={location?.coords} radius={1000} fillColor="rgba(6, 172, 244, 0.26)" strokeColor="rgba(0, 0, 0, 0)" />
+			>
+				{initialParkingLots.map((x) => (
+					<Marker coordinate={{ latitude: x.latitude, longitude: x.longitude }} title={x.name} description={x.name} />
+				))}
+				<Circle center={location?.coords} radius={500} fillColor="rgba(6, 172, 244, 0.26)" strokeColor="rgba(0, 0, 0, 0)" />
+			</MapView>
 		</View>
 	);
 }
