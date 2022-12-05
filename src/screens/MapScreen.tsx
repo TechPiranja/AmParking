@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, View, Dimensions } from 'react-native';
-import { Text } from 'native-base';
+import { Box, Text } from 'native-base';
 
 import { Icon } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,7 +45,19 @@ export default function MapScreen() {
           <Marker
             coordinate={{ latitude: x.latitude, longitude: x.longitude }}
             description={x?.total?.toString() ?? 'no data'}>
-            <Callout>
+            <Box
+              style={{
+                justifyContent: 'center',
+                backgroundColor: '#113371',
+                width: 30,
+                height: 30,
+                borderRadius: 20
+              }}>
+              <Text bold fontSize="lg" style={{ textAlign: 'center', color: '#fff' }}>
+                P
+              </Text>
+            </Box>
+            <Callout style={{ width: 150 }}>
               <Text fontSize="md" bold>
                 {x.name}
               </Text>
