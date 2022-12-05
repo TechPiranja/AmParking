@@ -1,23 +1,9 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Circle, Marker } from "react-native-maps";
 import { StyleSheet, View, Dimensions } from "react-native";
+import parkingSpots from "../data/parkingSpots.json";
 
 import * as Location from "expo-location";
-
-const initialParkingLots: any[] = [
-	{
-		id: 0,
-		name: "Kurfürstengarage",
-		latitude: 49.441433,
-		longitude: 11.860592,
-	},
-	{
-		id: 1,
-		name: "Theatergarage",
-		latitude: 49.446496,
-		longitude: 11.854837,
-	},
-];
 
 export default function MapScreen() {
 	const [location, setLocation] = useState<any>(null);
@@ -50,7 +36,7 @@ export default function MapScreen() {
 				showsCompass
 				showsScale
 			>
-				{initialParkingLots.map((x) => (
+				{parkingSpots.map((x: any) => (
 					<Marker coordinate={{ latitude: x.latitude, longitude: x.longitude }} title={x.name} description={x.name} />
 				))}
 				<Circle center={location?.coords} radius={500} fillColor="rgba(6, 172, 244, 0.26)" strokeColor="rgba(0, 0, 0, 0)" />
