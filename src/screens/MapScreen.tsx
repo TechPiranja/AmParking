@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
+import ParkList from '../components/ParkList';
 
 export default function MapScreen() {
   const [location, setLocation] = useState<any>(null);
@@ -88,6 +89,7 @@ export default function MapScreen() {
           strokeColor="rgba(0, 0, 0, 0)"
         />
       </MapView>
+      <ParkList parkingSpots={parkingSpots}/>
     </View>
   );
 }
