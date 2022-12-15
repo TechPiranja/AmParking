@@ -1,15 +1,18 @@
 import { FlatList, Icon, Text, View } from 'native-base';
 import React from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import { Ionicons } from '@expo/vector-icons';
 
 interface ItemProp {
   x: ParkingSpotInfo;
+  setMapLocation: any;
 }
 
-const Item = ({ x }: ItemProp) => (
-  <View style={styles.item}>
+const Item = ({ x, setMapLocation }: ItemProp) => (
+  <TouchableOpacity
+    style={styles.item}
+    onPress={() => setMapLocation({ coords: { latitude: x.latitude, longitude: x.longitude } })}>
     <Text fontSize="md" bold>
       {x?.name}
     </Text>
@@ -30,15 +33,16 @@ const Item = ({ x }: ItemProp) => (
     <Text bold style={{ color: x?.closed ? 'red' : 'green' }}>
       {x?.closed ? 'Geschlossen' : 'Offen'}
     </Text>
-  </View>
+  </TouchableOpacity>
 );
 
 interface ParkListProps {
   parkingSpots: ParkingSpotInfo[];
+  setMapLocation: void;
 }
 
-export default function ParkList({ parkingSpots }: ParkListProps) {
-  const renderItem = ({ item }: any) => <Item x={item} />;
+export default function ParkList({ parkingSpots, setMapLocation }: ParkListProps) {
+  const renderItem = ({ item }: any) => <Item x={item} setMapLocation={setMapLocation} />;
   return (
     <FlatList
       horizontal

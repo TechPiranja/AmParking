@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Box, Text } from 'native-base';
@@ -10,11 +10,14 @@ import * as Location from 'expo-location';
 import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import ParkList from '../components/ParkList';
+import { ParkingSpot } from '../types/ParkingSpot';
 
 export default function MapScreen() {
-  const [location, setLocation] = useState<any>(null);
+  const [userLocation, setUserLocation] = useState<any>(null);
+  const [mapLocation, setMapLocation] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<any>(null);
   const parkingSpots = useParkingData();
+  let mapRef = useRef<any>(null); // ref => { current: null }
 
   useEffect(() => {
     (async () => {
@@ -25,17 +28,32 @@ export default function MapScreen() {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      setUserLocation(location);
+      setMapLocation(location);
     })();
   }, []);
+
+  function moveToCoordinate(x:ParkingSpot) {
+    mapRef.current.animateCamera({
+      center: {
+        latitude: x.latitude,
+        longitude: x.longitude
+      },
+      pitch: 2,
+      altitude: 2000
+    })
+  }
 
   return (
     <View style={styles.container}>
       <MapView
+        ref={(map) => {
+          mapRef.current = map;
+        }}
         style={styles.map}
         region={{
-          latitude: location?.coords.latitude,
-          longitude: location?.coords.longitude,
+          latitude: mapLocation?.coords.latitude,
+          longitude: mapLocation?.coords.longitude,
           latitudeDelta: 0.03,
           longitudeDelta: 0.02
         }}
@@ -44,6 +62,16 @@ export default function MapScreen() {
         showsScale>
         {parkingSpots?.map((x: ParkingSpotInfo) => (
           <Marker
+            onPress={() =>
+              mapRef.current.animateCamera({
+                center: {
+                  latitude: x.latitude,
+                  longitude: x.longitude
+                },
+                pitch: 2,
+                altitude: 2000
+              })
+            }
             coordinate={{ latitude: x.latitude, longitude: x.longitude }}
             description={x?.total?.toString() ?? 'no data'}>
             <Box
@@ -83,13 +111,13 @@ export default function MapScreen() {
           </Marker>
         ))}
         <Circle
-          center={location?.coords}
+          center={userLocation?.coords}
           radius={500}
           fillColor="rgba(6, 172, 244, 0.26)"
           strokeColor="rgba(0, 0, 0, 0)"
         />
       </MapView>
-      <ParkList parkingSpots={parkingSpots}/>
+      <ParkList parkingSpots={parkingSpots} setMapLocation={setMapLocation} />
     </View>
   );
 }
