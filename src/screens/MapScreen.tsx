@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Box, Text } from 'native-base';
-
-import { Icon } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
 
 import * as Location from 'expo-location';
 import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import ParkList from '../components/ParkList';
 import { ParkingSpot } from '../types/ParkingSpot';
+import ParkInfo from '../components/ParkInfo';
 
 export default function MapScreen() {
   const [userLocation, setUserLocation] = useState<any>(null);
@@ -79,26 +77,7 @@ export default function MapScreen() {
               </Text>
             </Box>
             <Callout style={{ width: 150 }}>
-              <Text fontSize="md" bold>
-                {x.name}
-              </Text>
-              <Text>
-                <Text bold>Belegt: </Text> {x?.current?.toString() ?? 'no data'} /{' '}
-                {x?.total?.toString() ?? 'no data'}
-              </Text>
-              <Text>
-                <Text bold>Frei: </Text> {x?.free?.toString() ?? 'no data'}
-              </Text>
-              <Text>
-                <Text bold>Trend: </Text>{' '}
-                <Icon as={Ionicons} name={x?.trend ? 'trending-down' : 'trending-up'} />
-              </Text>
-              {/* <Text>
-                <Text bold>Status: </Text> {x?.state?.toString() ?? 'no data'}
-              </Text> */}
-              <Text bold style={{ color: x?.closed ? 'red' : 'green' }}>
-                {x?.closed ? 'Geschlossen' : 'Offen'}
-              </Text>
+              <ParkInfo parkingSpotInfo={x} />
             </Callout>
           </Marker>
         ))}
