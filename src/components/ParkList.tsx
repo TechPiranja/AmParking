@@ -6,13 +6,11 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface ItemProp {
   x: ParkingSpotInfo;
-  setMapLocation: any;
+  moveToCoordinate: any;
 }
 
-const Item = ({ x, setMapLocation }: ItemProp) => (
-  <TouchableOpacity
-    style={styles.item}
-    onPress={() => setMapLocation({ coords: { latitude: x.latitude, longitude: x.longitude } })}>
+const Item = ({ x, moveToCoordinate }: ItemProp) => (
+  <TouchableOpacity style={styles.item} onPress={() => moveToCoordinate(x)}>
     <Text fontSize="md" bold>
       {x?.name}
     </Text>
@@ -38,11 +36,11 @@ const Item = ({ x, setMapLocation }: ItemProp) => (
 
 interface ParkListProps {
   parkingSpots: ParkingSpotInfo[];
-  setMapLocation: void;
+  moveToCoordinate: void;
 }
 
-export default function ParkList({ parkingSpots, setMapLocation }: ParkListProps) {
-  const renderItem = ({ item }: any) => <Item x={item} setMapLocation={setMapLocation} />;
+export default function ParkList({ parkingSpots, moveToCoordinate }: ParkListProps) {
+  const renderItem = ({ item }: any) => <Item x={item} moveToCoordinate={moveToCoordinate} />;
   return (
     <FlatList
       horizontal

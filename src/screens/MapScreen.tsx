@@ -33,15 +33,15 @@ export default function MapScreen() {
     })();
   }, []);
 
-  function moveToCoordinate(x:ParkingSpot) {
+  function moveToCoordinate(x: ParkingSpot) {
     mapRef.current.animateCamera({
       center: {
         latitude: x.latitude,
         longitude: x.longitude
       },
       pitch: 2,
-      altitude: 2000
-    })
+      altitude: 4000
+    });
   }
 
   return (
@@ -62,16 +62,7 @@ export default function MapScreen() {
         showsScale>
         {parkingSpots?.map((x: ParkingSpotInfo) => (
           <Marker
-            onPress={() =>
-              mapRef.current.animateCamera({
-                center: {
-                  latitude: x.latitude,
-                  longitude: x.longitude
-                },
-                pitch: 2,
-                altitude: 2000
-              })
-            }
+            onPress={() => moveToCoordinate(x)}
             coordinate={{ latitude: x.latitude, longitude: x.longitude }}
             description={x?.total?.toString() ?? 'no data'}>
             <Box
@@ -117,7 +108,7 @@ export default function MapScreen() {
           strokeColor="rgba(0, 0, 0, 0)"
         />
       </MapView>
-      <ParkList parkingSpots={parkingSpots} setMapLocation={setMapLocation} />
+      <ParkList parkingSpots={parkingSpots} moveToCoordinate={moveToCoordinate} />
     </View>
   );
 }
