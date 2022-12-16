@@ -3,6 +3,7 @@ import React from 'react';
 import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import { Ionicons } from '@expo/vector-icons';
+import { ParkingSpot } from '../types/ParkingSpot';
 
 interface ItemProp {
   x: ParkingSpotInfo;
@@ -36,7 +37,7 @@ const Item = ({ x, moveToCoordinate }: ItemProp) => (
 
 interface ParkListProps {
   parkingSpots: ParkingSpotInfo[];
-  moveToCoordinate: void;
+  moveToCoordinate(x: ParkingSpot): void;
 }
 
 export default function ParkList({ parkingSpots, moveToCoordinate }: ParkListProps) {

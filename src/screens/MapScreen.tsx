@@ -62,6 +62,7 @@ export default function MapScreen() {
         showsScale>
         {parkingSpots?.map((x: ParkingSpotInfo) => (
           <Marker
+            key={x.id}
             onPress={() => moveToCoordinate(x)}
             coordinate={{ latitude: x.latitude, longitude: x.longitude }}
             description={x?.total?.toString() ?? 'no data'}>
