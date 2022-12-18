@@ -14,7 +14,7 @@ export default function MapScreen() {
   const [userLocation, setUserLocation] = useState<any>(null);
   const [mapLocation, setMapLocation] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<any>(null);
-  const parkingSpots = useParkingData();
+  const { parkingSpots, changeSpot } = useParkingData();
   let mapRef = useRef<any>(null); // ref => { current: null }
 
   useEffect(() => {
@@ -76,8 +76,8 @@ export default function MapScreen() {
                 P
               </Text>
             </Box>
-            <Callout style={{ width: 150 }}>
-              <ParkInfo parkingSpotInfo={x} />
+            <Callout>
+              <ParkInfo parkingSpotInfo={x} changeSpot={changeSpot} />
             </Callout>
           </Marker>
         ))}
@@ -88,7 +88,7 @@ export default function MapScreen() {
           strokeColor="rgba(0, 0, 0, 0)"
         />
       </MapView>
-      <ParkList parkingSpots={parkingSpots} moveToCoordinate={moveToCoordinate} />
+      <ParkList parkingSpots={parkingSpots} moveToCoordinate={moveToCoordinate} changeSpot={changeSpot}/>
     </View>
   );
 }

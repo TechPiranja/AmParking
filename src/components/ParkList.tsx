@@ -8,21 +8,25 @@ import ParkInfo from './ParkInfo';
 interface ItemProp {
   x: ParkingSpotInfo;
   moveToCoordinate: any;
+  changeSpot: any;
 }
 
-const Item = ({ x, moveToCoordinate }: ItemProp) => (
+const Item = ({ x, moveToCoordinate, changeSpot }: ItemProp) => (
   <TouchableOpacity style={styles.item} onPress={() => moveToCoordinate(x)}>
-    <ParkInfo parkingSpotInfo={x} />
+    <ParkInfo parkingSpotInfo={x} changeSpot={changeSpot} />
   </TouchableOpacity>
 );
 
 interface ParkListProps {
   parkingSpots: ParkingSpotInfo[];
   moveToCoordinate(x: ParkingSpot): void;
+  changeSpot: any;
 }
 
-export default function ParkList({ parkingSpots, moveToCoordinate }: ParkListProps) {
-  const renderItem = ({ item }: any) => <Item x={item} moveToCoordinate={moveToCoordinate} />;
+export default function ParkList({ parkingSpots, moveToCoordinate, changeSpot }: ParkListProps) {
+  const renderItem = ({ item }: any) => (
+    <Item x={item} moveToCoordinate={moveToCoordinate} changeSpot={changeSpot} />
+  );
   return (
     <FlatList
       horizontal

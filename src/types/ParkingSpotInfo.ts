@@ -7,5 +7,6 @@ export interface ParkingSpotInfo extends ParkingSpot {
     free?: number,
     trend?: -1 | 0 | 1,
     state?: "OK" | "Ersatzwerte" | "Manuell" | "Störung",
-    closed?: boolean
+    closed?: boolean,
+    isFavorite?: boolean
 }
