@@ -31,7 +31,7 @@ export default function ParkList({ parkingSpots, moveToCoordinate, changeSpot }:
     <FlatList
       horizontal
       style={{ position: 'absolute', bottom: 0 }}
-      data={parkingSpots}
+      data={parkingSpots.sort((a: any, b: any) => Number(a!.isFavorite < b!.isFavorite))}
       renderItem={renderItem}
       keyExtractor={(item) => item.id.toString()}
     />
