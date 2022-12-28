@@ -27,34 +27,37 @@ export default function MapScreen() {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      await Location.requestBackgroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+      await Location.requestForegroundPermissionsAsync();
 
       let location = await Location.getCurrentPositionAsync({});
       setUserLocation(location);
       setMapLocation(location);
-    })();
+      console.warn(location);
 
-    TaskManager.defineTask(GEOFENCING, ({ data: { eventType, region }, error }: any) => {
-      if (error) {
-        // check `error.message` for more details.
-        return;
-      }
-      if (eventType === Location.GeofencingEventType.Enter) {
-        console.log("You've entered region:", region);
-        toast.show({
-          description: 'Parkhaus ' + region.identifier + ' in der Nähe!'
-        });
-        Speech.speak('Parkhaus ' + region.identifier + ' in der Nähe!', { language: 'de' });
-      } else if (eventType === Location.GeofencingEventType.Exit) {
-        //console.log("You've left region:", region);
-      }
-    });
-    Speech.speak('Parkhaus in Nähe!');
+      await Location.requestBackgroundPermissionsAsync();
+
+      TaskManager.defineTask(GEOFENCING, ({ data: { eventType, region }, error }: any) => {
+        if (error) {
+          Speech.speak('Fehler', { language: 'de' });
+          return;
+        }
+        if (eventType === Location.GeofencingEventType.Enter) {
+          console.log("You've entered region:", region);
+          toast.show({
+            description: 'Parkhaus ' + region.identifier + ' in der Nähe!'
+          });
+          Speech.speak('Parkhaus ' + region.identifier + ' in der Nähe!', { language: 'de' });
+        } else if (eventType === Location.GeofencingEventType.Exit) {
+          //console.log("You've left region:", region);
+        }
+      });
+
+      // this is just for testing and needs to be removed!
+      toast.show({
+        description: 'Parkhaus in der Nähe!'
+      });
+      Speech.speak('Parkhaus in Nähe!');
+    })();
   }, []);
 
   useEffect(() => {
@@ -74,7 +77,7 @@ export default function MapScreen() {
   }, [loading]);
 
   useEffect(() => {
-    if (loading) setLoading(false);
+    if (loading && parkingSpots.length > 0) setLoading(false);
   }, [parkingSpots]);
 
   function moveToCoordinate(x: ParkingSpot) {

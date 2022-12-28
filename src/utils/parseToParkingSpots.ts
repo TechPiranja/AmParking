@@ -10,6 +10,7 @@ export default function parseToParkingSpots(data: any, currentParkingSpots: Park
             parkingSpot.trend = parkingSpotData.Trend;
             parkingSpot.state = parkingSpotData.Status;
             parkingSpot.closed = parkingSpotData.Geschlossen === 1;
+            parkingSpot.isFavorite = parkingSpot.isFavorite ?? false;
         }
     }
 
