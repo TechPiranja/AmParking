@@ -5,6 +5,7 @@ import { XMLParser } from 'fast-xml-parser';
 import parkingSpotsData from '../data/parkingSpots.json'
 import parseToParkingSpots from '../utils/parseToParkingSpots';
 import { getParkingSpots, storeParkingSpots, changeIsFavorite } from '../utils/ParkingSpotStorage';
+import { Linking, Platform } from 'react-native';
 
 export default function useParkingData() {
   const [parkingSpots, setParkingSpots] = useState<ParkingSpotInfo[]>(parkingSpotsData);
@@ -32,6 +33,18 @@ export default function useParkingData() {
     setParkingSpots([...data!]);
   }
 
+  async function navigateToSpot(coords: any, name: string) {
+    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+    const latLng = `${coords.latitude},${coords.longitude}`;
+    const label = name;
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`
+    });
+
+    Linking.openURL(url!);
+  }
+
   useEffect(() => {
     loadDataFromLocalStorage();
 
@@ -43,5 +56,5 @@ export default function useParkingData() {
     return () => clearInterval(fetchingInterval);
   }, []);
 
-  return { parkingSpots, changeSpot };
+  return { parkingSpots, changeSpot, navigateToSpot };
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
 import { Box, Text } from 'native-base';
-
 import * as Location from 'expo-location';
 import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
@@ -10,9 +9,8 @@ import ParkList from '../components/ParkList';
 import { ParkingSpot } from '../types/ParkingSpot';
 import ParkInfo from '../components/ParkInfo';
 import * as TaskManager from 'expo-task-manager';
-import * as Speech from 'expo-speech';
 import { LocationRegion } from 'expo-location';
-import { useToast } from 'native-base';
+import useNotify from '../hooks/useNotify';
 
 const GEOFENCING = 'GEOFENCING';
 
@@ -21,9 +19,9 @@ export default function MapScreen() {
   const [mapLocation, setMapLocation] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { parkingSpots, changeSpot } = useParkingData();
+  const { parkingSpots, changeSpot, navigateToSpot } = useParkingData();
+  const { notify } = useNotify();
   let mapRef = useRef<any>(null); // ref => { current: null }
-  const toast = useToast();
 
   useEffect(() => {
     (async () => {
@@ -34,29 +32,22 @@ export default function MapScreen() {
       setMapLocation(location);
       console.warn(location);
 
-      await Location.requestBackgroundPermissionsAsync();
+      //await Location.requestBackgroundPermissionsAsync();
 
       TaskManager.defineTask(GEOFENCING, ({ data: { eventType, region }, error }: any) => {
         if (error) {
-          Speech.speak('Fehler', { language: 'de' });
+          notify('Fehler', false);
           return;
         }
         if (eventType === Location.GeofencingEventType.Enter) {
           console.log("You've entered region:", region);
-          toast.show({
-            description: 'Parkhaus ' + region.identifier + ' in der Nähe!'
-          });
-          Speech.speak('Parkhaus ' + region.identifier + ' in der Nähe!', { language: 'de' });
+          notify('Parkhaus ' + region.identifier + ' in der Nähe!');
         } else if (eventType === Location.GeofencingEventType.Exit) {
           //console.log("You've left region:", region);
         }
       });
 
-      // this is just for testing and needs to be removed!
-      toast.show({
-        description: 'Parkhaus in der Nähe!'
-      });
-      Speech.speak('Parkhaus in Nähe!');
+      notify('Parkhaus in Nähe!');
     })();
   }, []);
 
@@ -126,7 +117,11 @@ export default function MapScreen() {
               </Text>
             </Box>
             <Callout>
-              <ParkInfo parkingSpotInfo={x} changeSpot={changeSpot} />
+              <ParkInfo
+                parkingSpotInfo={x}
+                changeSpot={changeSpot}
+                navigateToSpot={navigateToSpot}
+              />
             </Callout>
           </Marker>
         ))}
@@ -141,6 +136,7 @@ export default function MapScreen() {
         parkingSpots={parkingSpots}
         moveToCoordinate={moveToCoordinate}
         changeSpot={changeSpot}
+        navigateToSpot={navigateToSpot}
       />
     </View>
   );

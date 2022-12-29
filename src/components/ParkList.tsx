@@ -9,11 +9,12 @@ interface ItemProp {
   x: ParkingSpotInfo;
   moveToCoordinate: any;
   changeSpot: any;
+  navigateToSpot: any;
 }
 
-const Item = ({ x, moveToCoordinate, changeSpot }: ItemProp) => (
+const Item = ({ x, moveToCoordinate, changeSpot, navigateToSpot }: ItemProp) => (
   <TouchableOpacity style={styles.item} onPress={() => moveToCoordinate(x)}>
-    <ParkInfo parkingSpotInfo={x} changeSpot={changeSpot} />
+    <ParkInfo parkingSpotInfo={x} changeSpot={changeSpot} navigateToSpot={navigateToSpot} />
   </TouchableOpacity>
 );
 
@@ -21,11 +22,22 @@ interface ParkListProps {
   parkingSpots: ParkingSpotInfo[];
   moveToCoordinate(x: ParkingSpot): void;
   changeSpot: any;
+  navigateToSpot: any;
 }
 
-export default function ParkList({ parkingSpots, moveToCoordinate, changeSpot }: ParkListProps) {
+export default function ParkList({
+  parkingSpots,
+  moveToCoordinate,
+  changeSpot,
+  navigateToSpot
+}: ParkListProps) {
   const renderItem = ({ item }: any) => (
-    <Item x={item} moveToCoordinate={moveToCoordinate} changeSpot={changeSpot} />
+    <Item
+      x={item}
+      moveToCoordinate={moveToCoordinate}
+      changeSpot={changeSpot}
+      navigateToSpot={navigateToSpot}
+    />
   );
   return (
     <FlatList
