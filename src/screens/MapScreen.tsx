@@ -2,54 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
 import { Box, Text } from 'native-base';
-import * as Location from 'expo-location';
 import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import ParkList from '../components/ParkList';
 import { ParkingSpot } from '../types/ParkingSpot';
 import ParkInfo from '../components/ParkInfo';
-import * as TaskManager from 'expo-task-manager';
 import { LocationRegion } from 'expo-location';
-import useNotify from '../hooks/useNotify';
-
-const GEOFENCING = 'GEOFENCING';
+import useGeofences from '../hooks/useGeofences';
 
 export default function MapScreen() {
-  const [userLocation, setUserLocation] = useState<any>(null);
   const [mapLocation, setMapLocation] = useState<any>(null);
-  const [errorMsg, setErrorMsg] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { parkingSpots, changeSpot, navigateToSpot } = useParkingData();
-  const { notify } = useNotify();
+  const { setGeofencingRegions, closestRegion, userLocation } = useGeofences();
   let mapRef = useRef<any>(null); // ref => { current: null }
 
   useEffect(() => {
-    (async () => {
-      await Location.requestForegroundPermissionsAsync();
-
-      let location = await Location.getCurrentPositionAsync({});
-      setUserLocation(location);
-      setMapLocation(location);
-      console.warn(location);
-
-      //await Location.requestBackgroundPermissionsAsync();
-
-      TaskManager.defineTask(GEOFENCING, ({ data: { eventType, region }, error }: any) => {
-        if (error) {
-          notify('Fehler', false);
-          return;
-        }
-        if (eventType === Location.GeofencingEventType.Enter) {
-          console.log("You've entered region:", region);
-          notify('Parkhaus ' + region.identifier + ' in der Nähe!');
-        } else if (eventType === Location.GeofencingEventType.Exit) {
-          //console.log("You've left region:", region);
-        }
-      });
-
-      notify('Parkhaus in Nähe!');
-    })();
-  }, []);
+    setMapLocation(userLocation);
+  }, [userLocation]);
 
   useEffect(() => {
     if (loading === false) {
@@ -63,7 +33,8 @@ export default function MapScreen() {
           notifyOnEnter: true
         })
       );
-      Location.startGeofencingAsync(GEOFENCING, regions);
+      setGeofencingRegions(regions);
+      // Location.startGeofencingAsync(GEOFENCING, regions);
     }
   }, [loading]);
 
@@ -127,11 +98,14 @@ export default function MapScreen() {
         ))}
         <Circle
           center={userLocation?.coords}
-          radius={500}
+          radius={300}
           fillColor="rgba(6, 172, 244, 0.26)"
           strokeColor="rgba(0, 0, 0, 0)"
         />
       </MapView>
+      <View style={{ bottom: 200, backgroundColor: '#ddefff', padding: 10, borderRadius: 10 }}>
+        <Text>{closestRegion?.identifier ?? ''}</Text>
+      </View>
       <ParkList
         parkingSpots={parkingSpots}
         moveToCoordinate={moveToCoordinate}
