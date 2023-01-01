@@ -4,13 +4,15 @@ import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
 import { LocationRegion } from 'expo-location';
 import getClosestRegion from '../utils/getClosestRegion';
+import { useDispatch, useSelector } from 'react-redux';
+import { addEnteredGeofence, changeClosestRegion, removeEnteredGeofence } from '../redux/reducers/geofencesReducer';
 
 const GEOFENCING = 'GEOFENCING';
 
 export default function useGeofences() {
-  const [enteredGeofences, setEnteredGeofences] = useState<LocationRegion[]>([]);
+  const geofences = useSelector((state: any) => state.geofences);
+  const dispatch = useDispatch();
   const [geofencingRegions, setGeofencingRegions] = useState<LocationRegion[]>([]);
-  const [closestRegion, setClosestRegion] = useState<LocationRegion | undefined>(undefined);
   const [userLocation, setUserLocation] = useState<any>(null);
   const { notify } = useNotify();
 
@@ -19,13 +21,21 @@ export default function useGeofences() {
   }, [geofencingRegions])
 
   async function updateClosestRegion() {
-    setClosestRegion(await getClosestRegion(enteredGeofences));
+    dispatch(changeClosestRegion(await getClosestRegion(geofences.enteredGeofences)));
   }
 
   useEffect(() => {
-    updateClosestRegion();
-    console.warn("updating choosen one")
-  }, [enteredGeofences])
+    if (geofences.enteredGeofences.length == 0)
+      dispatch(changeClosestRegion(undefined));
+    else
+      updateClosestRegion();
+  }, [geofences.enteredGeofences])
+
+  useEffect(() => {
+    if (geofences?.closestRegion?.identifier)
+      notify('Parkhaus ' + geofences?.closestRegion?.identifier + ' in der Nähe!');
+  }, [geofences.closestRegion])
+
 
   async function getUserLocation() {
     await Location.requestForegroundPermissionsAsync();
@@ -41,18 +51,6 @@ export default function useGeofences() {
     return () => clearInterval(LocationInterval);
   }, []);
 
-  function addToList(region: LocationRegion) {
-    let findDuplicate = enteredGeofences.find(x => x.latitude == region.latitude && x.longitude == region.longitude);
-    if (!findDuplicate) {
-      setEnteredGeofences([...enteredGeofences, region]);
-    }
-  }
-
-  function removeFromList(region: LocationRegion) {
-    let filteredList = enteredGeofences.filter(x => x.latitude != region.latitude && x.longitude != region.longitude);
-    setEnteredGeofences(filteredList);
-  }
-
   useEffect(() => {
     TaskManager.defineTask(GEOFENCING, ({ data: { eventType, region }, error }: any) => {
       if (error) {
@@ -60,14 +58,12 @@ export default function useGeofences() {
         return;
       }
       if (eventType === Location.GeofencingEventType.Enter) {
-        console.log("You've entered region:", region);
-        addToList(region);
-        notify('Parkhaus ' + region.identifier + ' in der Nähe!');
+        dispatch(addEnteredGeofence(region));
       } else if (eventType === Location.GeofencingEventType.Exit) {
-        removeFromList(region);
+        dispatch(removeEnteredGeofence(region));
       }
     });
   }, []);
 
-  return { setGeofencingRegions, closestRegion, userLocation };
+  return { setGeofencingRegions, userLocation };
 }

@@ -9,12 +9,14 @@ import { ParkingSpot } from '../types/ParkingSpot';
 import ParkInfo from '../components/ParkInfo';
 import { LocationRegion } from 'expo-location';
 import useGeofences from '../hooks/useGeofences';
+import { useSelector } from 'react-redux';
 
 export default function MapScreen() {
   const [mapLocation, setMapLocation] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { parkingSpots, changeSpot, navigateToSpot } = useParkingData();
-  const { setGeofencingRegions, closestRegion, userLocation } = useGeofences();
+  const { setGeofencingRegions, userLocation } = useGeofences();
+  const geofences = useSelector((state: any) => state.geofences);
   let mapRef = useRef<any>(null); // ref => { current: null }
 
   useEffect(() => {
@@ -103,8 +105,16 @@ export default function MapScreen() {
           strokeColor="rgba(0, 0, 0, 0)"
         />
       </MapView>
-      <View style={{ bottom: 200, backgroundColor: '#ddefff', padding: 10, borderRadius: 10 }}>
-        <Text>{closestRegion?.identifier ?? ''}</Text>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 160,
+          width: '95%',
+          backgroundColor: '#ddefffce',
+          padding: 10,
+          borderRadius: 10
+        }}>
+        <Text>{'Parkhaus in der Nähe: ' + geofences?.closestRegion?.identifier ?? ''}</Text>
       </View>
       <ParkList
         parkingSpots={parkingSpots}
