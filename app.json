@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "AmParking",
+    "name": "AmParkingAPPP",
     "slug": "AmParking",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,11 +14,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "1.0.2",
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["location"],
+        "NSLocationUsageDescription": "This is needed for geofencing",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "App requires location even when the App is backgrounded."
+      },
+      "bundleIdentifier": "com.techpiranja.AmParkingAPPP"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +33,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "818722f7-dfff-42da-9567-278ced566b15"
+      }
     }
   }
 }
