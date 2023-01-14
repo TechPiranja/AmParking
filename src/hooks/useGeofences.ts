@@ -14,17 +14,20 @@ export default function useGeofences() {
   const dispatch = useDispatch();
   const [geofencingRegions, setGeofencingRegions] = useState<LocationRegion[]>([]);
   const [userLocation, setUserLocation] = useState<any>(null);
+  const [loadedPermissions, setLoadedPermissions] = useState<boolean>(false);
   const { notify } = useNotify();
 
   useEffect(() => {
     Location.startGeofencingAsync(GEOFENCING, geofencingRegions);
-  }, [geofencingRegions])
+    console.log(JSON.stringify(geofencingRegions))
+  }, [geofencingRegions, loadedPermissions])
 
   async function updateClosestRegion() {
     dispatch(changeClosestRegion(await getClosestRegion(geofences.enteredGeofences)));
   }
 
   useEffect(() => {
+    console.log('entered')
     if (geofences.enteredGeofences.length == 0)
       dispatch(changeClosestRegion(undefined));
     else
@@ -38,9 +41,14 @@ export default function useGeofences() {
 
 
   async function getUserLocation() {
+    await Location.hasServicesEnabledAsync()
     await Location.requestForegroundPermissionsAsync();
+    await Location.requestBackgroundPermissionsAsync();
+
+    //console.warn(status);
     let location = await Location.getCurrentPositionAsync({});
     setUserLocation(location);
+    setLoadedPermissions(true);
   }
 
   useEffect(() => {

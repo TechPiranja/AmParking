@@ -36,7 +36,6 @@ export default function MapScreen() {
         })
       );
       setGeofencingRegions(regions);
-      // Location.startGeofencingAsync(GEOFENCING, regions);
     }
   }, [loading]);
 

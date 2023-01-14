@@ -43,7 +43,7 @@ export default function ParkList({
     <FlatList
       horizontal
       style={{ position: 'absolute', bottom: 0 }}
-      data={parkingSpots.sort(
+      data={parkingSpots?.sort(
         (a: ParkingSpotInfo, b: ParkingSpotInfo) => Number(b!.isFavorite) - Number(a!.isFavorite)
       )}
       renderItem={renderItem}
