@@ -2,7 +2,7 @@
   "expo": {
     "name": "AmParkingAPPP",
     "slug": "AmParking",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "1.0.2",
+      "buildNumber": "1.0.3",
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": ["location"],

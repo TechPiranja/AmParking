@@ -3,6 +3,22 @@ import MapScreen from '../screens/MapScreen';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import SettingsScreen from '../screens/SettingsScreen';
 import ListScreen from '../screens/ListScreen';
+import DetailedParkInfo from '../components/DetailedParkInfo';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const ListStack = createStackNavigator();
+function ListStackScreen() {
+  return (
+    <ListStack.Navigator>
+      <ListStack.Screen name="Liste" component={ListScreen} />
+      <ListStack.Screen
+        name="Parkdetails"
+        component={DetailedParkInfo}
+        options={{ headerTitle: 'Park Details' }}
+      />
+    </ListStack.Navigator>
+  );
+}
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +38,7 @@ export default function BottomTabs() {
         tabBarActiveTintColor: 'orange',
         tabBarInactiveTintColor: 'gray'
       })}>
-      <Tab.Screen name="Liste" component={ListScreen} />
+      <Tab.Screen name="Liste" component={ListStackScreen} options={{ headerShown: false }} />
       <Tab.Screen options={{ headerShown: false }} name="Karte" component={MapScreen} />
       <Tab.Screen name="Einstellungen" component={SettingsScreen} />
     </Tab.Navigator>

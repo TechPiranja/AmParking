@@ -3,6 +3,7 @@ import { Icon, IconButton, Text } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import { View } from 'react-native';
+import useParkingData from '../hooks/useParkingData';
 
 interface ParkInfoProps {
   parkingSpotInfo: ParkingSpotInfo;
@@ -10,48 +11,46 @@ interface ParkInfoProps {
   navigateToSpot: any;
 }
 
-export default function ParkInfo({ parkingSpotInfo, changeSpot, navigateToSpot }: ParkInfoProps) {
+export default function DetailedParkInfo({ route }: any) {
+  const { x } = route.params ?? { x: undefined };
+  const { changeSpot, navigateToSpot } = useParkingData();
+
   return (
     <View style={{ width: 140 }}>
       <Text fontSize="md" bold>
-        {parkingSpotInfo?.name}
+        {x?.name}
       </Text>
       <Text>
-        <Text bold>Belegt: </Text> {parkingSpotInfo?.current?.toString() ?? 'no data'} /{' '}
-        {parkingSpotInfo?.total?.toString() ?? 'no data'}
+        <Text bold>Belegt: </Text> {x?.current?.toString() ?? 'no data'} /{' '}
+        {x?.total?.toString() ?? 'no data'}
       </Text>
       <Text>
-        <Text bold>Frei: </Text> {parkingSpotInfo?.free?.toString() ?? 'no data'}
+        <Text bold>Frei: </Text> {x?.free?.toString() ?? 'no data'}
       </Text>
       <Text>
         <Text bold>Trend: </Text>{' '}
-        <Icon as={Ionicons} name={parkingSpotInfo?.trend ? 'trending-down' : 'trending-up'} />
+        <Icon as={Ionicons} name={x?.trend ? 'trending-down' : 'trending-up'} />
       </Text>
       {/* <Text>
     <Text bold>Status: </Text> {parkingSpotInfo?.state?.toString() ?? 'no data'}
   </Text> */}
 
-      <Text bold style={{ color: parkingSpotInfo?.closed ? 'red' : 'green' }}>
-        {parkingSpotInfo.closed ? 'Geschlossen' : 'Offen'}
+      <Text bold style={{ color: x?.closed ? 'red' : 'green' }}>
+        {x?.closed ? 'Geschlossen' : 'Offen'}
       </Text>
       <IconButton
         style={{ position: 'absolute', bottom: -10, right: -10 }}
         size="lg"
-        icon={<Icon as={Ionicons} name={parkingSpotInfo?.isFavorite ? 'star' : 'star-outline'} />}
+        icon={<Icon as={Ionicons} name={x?.isFavorite ? 'star' : 'star-outline'} />}
         borderRadius="full"
-        onPress={() => changeSpot(parkingSpotInfo.id, !parkingSpotInfo.isFavorite ?? true)}
+        onPress={() => changeSpot(x?.id, !x.isFavorite ?? true)}
       />
       <IconButton
         style={{ position: 'absolute', bottom: -10, right: 25 }}
         size="lg"
         icon={<Icon as={Ionicons} name={'navigate'} />}
         borderRadius="full"
-        onPress={() =>
-          navigateToSpot(
-            { latitude: parkingSpotInfo!.latitude, longitude: parkingSpotInfo!.longitude },
-            parkingSpotInfo!.name
-          )
-        }
+        onPress={() => navigateToSpot({ latitude: x!.latitude, longitude: x!.longitude }, x!.name)}
       />
     </View>
   );

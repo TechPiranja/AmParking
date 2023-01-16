@@ -1,17 +1,18 @@
+import { useNavigation } from '@react-navigation/native';
 import { FlatList, ScrollView } from 'native-base';
 import React from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import ParkInfo from './ParkInfo';
 
 interface ItemProp {
   x: ParkingSpotInfo;
-  changeSpot: any;
-  navigateToSpot: any;
+  navigation: any;
 }
 
-const Item = ({ x, changeSpot, navigateToSpot }: ItemProp) => (
-  <TouchableOpacity style={styles.item}>
+const Item = ({ x, navigation }: ItemProp) => (
+  <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Parkdetails', { x })}>
     <Text>{x.name}</Text>
     {/* <ParkInfo parkingSpotInfo={x} changeSpot={changeSpot} navigateToSpot={navigateToSpot} /> */}
   </TouchableOpacity>
@@ -35,14 +36,11 @@ const ItemDivider = () => {
   );
 };
 
-export default function DetailedParkList({
-  parkingSpots,
-  changeSpot,
-  navigateToSpot
-}: ParkListProps) {
-  const renderItem = ({ item }: any) => (
-    <Item x={item} changeSpot={changeSpot} navigateToSpot={navigateToSpot} />
-  );
+export default function DetailedParkList() {
+  const navigation = useNavigation();
+  const { parkingSpots } = useParkingData();
+
+  const renderItem = ({ item }: any) => <Item x={item} navigation={navigation} />;
   return (
     <ScrollView style={{ flex: 1 }}>
       <FlatList
