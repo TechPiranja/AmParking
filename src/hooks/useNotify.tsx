@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import * as Speech from 'expo-speech';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeSpeechVolume } from '../redux/reducers/settingsReducer';
-import { Box, useToast, Text } from 'native-base';
+import { useToast } from 'native-base';
 
 export default function useNotify() {
   const settings = useSelector((state: any) => state.settings);
@@ -18,7 +18,7 @@ export default function useNotify() {
     };
   }, []);
 
-  function notify(text: string, customRender: any = undefined, showMessage: boolean = true) {
+  function notify(text: string, showMessage: boolean = true) {
     if (showMessage)
       if (!toast.isActive(text)) {
         toast.show({

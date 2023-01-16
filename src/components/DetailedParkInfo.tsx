@@ -5,12 +5,6 @@ import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import { View } from 'react-native';
 import useParkingData from '../hooks/useParkingData';
 
-interface ParkInfoProps {
-  parkingSpotInfo: ParkingSpotInfo;
-  changeSpot: any;
-  navigateToSpot: any;
-}
-
 export default function DetailedParkInfo({ route }: any) {
   const { x } = route.params ?? { x: undefined };
   const { changeSpot, navigateToSpot } = useParkingData();
@@ -26,6 +20,9 @@ export default function DetailedParkInfo({ route }: any) {
       </Text>
       <Text>
         <Text bold>Frei: </Text> {x?.free?.toString() ?? 'no data'}
+      </Text>
+      <Text>
+        <Text bold>Preis für 1 Stunde: </Text> {x?.price?.toString() + ' €' ?? 'no data'}
       </Text>
       <Text>
         <Text bold>Trend: </Text>{' '}
@@ -44,7 +41,7 @@ export default function DetailedParkInfo({ route }: any) {
         icon={<Icon as={Ionicons} name={x?.isFavorite ? 'star' : 'star-outline'} />}
         borderRadius="full"
         onPress={() => changeSpot(x?.id, !x.isFavorite ?? true)}
-      /> */} 
+      /> */}
       <IconButton
         style={{ position: 'absolute', bottom: -5, right: 0 }}
         size="lg"

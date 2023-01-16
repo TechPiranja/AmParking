@@ -14,7 +14,7 @@ function ListStackScreen() {
       <ListStack.Screen
         name="Parkdetails"
         component={DetailedParkInfo}
-        options={{ headerTitle: 'Park Details' }}
+        options={{ headerTitle: 'Parkplatz Details' }}
       />
     </ListStack.Navigator>
   );

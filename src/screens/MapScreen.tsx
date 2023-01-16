@@ -132,7 +132,6 @@ export default function MapScreen() {
             borderRadius: 10
           }}>
           <Text>{'Parkhaus in der Nähe: ' + geofences?.closestRegion?.identifier ?? ''}</Text>
-
           <IconButton
             style={{ position: 'absolute', bottom: -5, right: 5 }}
             size="lg"

@@ -6,6 +6,7 @@ import { LocationRegion } from 'expo-location';
 import getClosestRegion from '../utils/getClosestRegion';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEnteredGeofence, changeClosestRegion, removeEnteredGeofence } from '../redux/reducers/geofencesReducer';
+import { getParkingSpots } from '../utils/ParkingSpotStorage';
 
 const GEOFENCING = 'GEOFENCING';
 
@@ -35,9 +36,17 @@ export default function useGeofences() {
 
   }, [geofences.enteredGeofences, userLocation, settings.radius])
 
+  async function getAmountOfFreeSpots(name: string) {
+    const data = await getParkingSpots();
+    const parkingSpot = data!.find((p) => p.name === name);
+    return parkingSpot!.free;
+  }
+
   useEffect(() => {
-    if (geofences?.closestRegion?.identifier)
-      notify('Parkhaus ' + geofences?.closestRegion?.identifier + ' in der Nähe!');
+    if (geofences?.closestRegion?.identifier) {
+      getAmountOfFreeSpots(geofences?.closestRegion?.identifier)
+        .then(freeSpots => notify('Parkhaus ' + geofences?.closestRegion?.identifier + ' in der Nähe. ' + freeSpots + ' Parkplätze frei.'));
+    }
   }, [geofences.closestRegion])
 
 
