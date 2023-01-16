@@ -16,8 +16,8 @@ export default function DetailedParkInfo({ route }: any) {
   const { changeSpot, navigateToSpot } = useParkingData();
 
   return (
-    <View style={{ width: 140 }}>
-      <Text fontSize="md" bold>
+    <View style={{ padding: 10, margin: 10, borderRadius: 10, backgroundColor: '#fff' }}>
+      <Text fontSize="lg" bold>
         {x?.name}
       </Text>
       <Text>
@@ -39,14 +39,14 @@ export default function DetailedParkInfo({ route }: any) {
         {x?.closed ? 'Geschlossen' : 'Offen'}
       </Text>
       <IconButton
-        style={{ position: 'absolute', bottom: -10, right: -10 }}
+        style={{ position: 'absolute', bottom: -5, right: -5 }}
         size="lg"
         icon={<Icon as={Ionicons} name={x?.isFavorite ? 'star' : 'star-outline'} />}
         borderRadius="full"
         onPress={() => changeSpot(x?.id, !x.isFavorite ?? true)}
       />
       <IconButton
-        style={{ position: 'absolute', bottom: -10, right: 25 }}
+        style={{ position: 'absolute', bottom: -5, right: 30 }}
         size="lg"
         icon={<Icon as={Ionicons} name={'navigate'} />}
         borderRadius="full"

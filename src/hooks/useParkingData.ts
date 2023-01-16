@@ -16,6 +16,7 @@ export default function useParkingData() {
       .then((response) => {
         let data = new XMLParser().parse(response.data);
         let parsedData = parseToParkingSpots(data, initial ?? parkingSpots!);
+        parsedData = parsedData.sort((a: ParkingSpotInfo, b: ParkingSpotInfo) => a.name < b.name ? -1 : 1)
         setParkingSpots([...parsedData]);
         storeParkingSpots(parsedData);
       });
