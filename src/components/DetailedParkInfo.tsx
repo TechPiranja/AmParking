@@ -38,15 +38,15 @@ export default function DetailedParkInfo({ route }: any) {
       <Text bold style={{ color: x?.closed ? 'red' : 'green' }}>
         {x?.closed ? 'Geschlossen' : 'Offen'}
       </Text>
-      <IconButton
+      {/* TODO: this needs redux! <IconButton
         style={{ position: 'absolute', bottom: -5, right: -5 }}
         size="lg"
         icon={<Icon as={Ionicons} name={x?.isFavorite ? 'star' : 'star-outline'} />}
         borderRadius="full"
         onPress={() => changeSpot(x?.id, !x.isFavorite ?? true)}
-      />
+      /> */} 
       <IconButton
-        style={{ position: 'absolute', bottom: -5, right: 30 }}
+        style={{ position: 'absolute', bottom: -5, right: 0 }}
         size="lg"
         icon={<Icon as={Ionicons} name={'navigate'} />}
         borderRadius="full"

@@ -1,3 +1,4 @@
 export enum SETTINGS {
-    SpeechVolume = "SpeechVolume"
+    SpeechVolume = "SpeechVolume",
+    Radius = "Radius"
 }

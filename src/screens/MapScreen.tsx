@@ -18,6 +18,7 @@ export default function MapScreen() {
   const { parkingSpots, changeSpot, navigateToSpot } = useParkingData();
   const { setGeofencingRegions, userLocation } = useGeofences();
   const geofences = useSelector((state: any) => state.geofences);
+  const settings = useSelector((state: any) => state.settings);
   let mapRef = useRef<any>(null); // ref => { current: null }
 
   useEffect(() => {
@@ -32,13 +33,13 @@ export default function MapScreen() {
           identifier: x.name,
           latitude: x.latitude,
           longitude: x.longitude,
-          radius: 300,
+          radius: settings?.radius ?? 300,
           notifyOnEnter: true
         })
       );
       setGeofencingRegions(regions);
     }
-  }, [loading]);
+  }, [loading, settings?.radius]);
 
   useEffect(() => {
     if (loading && parkingSpots.length > 0) setLoading(false);
@@ -100,7 +101,7 @@ export default function MapScreen() {
         ))}
         <Circle
           center={userLocation?.coords}
-          radius={300}
+          radius={settings?.radius}
           fillColor="rgba(6, 172, 244, 0.26)"
           strokeColor="rgba(0, 0, 0, 0)"
         />
