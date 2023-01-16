@@ -32,7 +32,7 @@ export default function useGeofences() {
       dispatch(changeClosestRegion(undefined));
     else
       updateClosestRegion();
-  }, [geofences.enteredGeofences])
+  }, [geofences.enteredGeofences, userLocation])
 
   useEffect(() => {
     if (geofences?.closestRegion?.identifier)
