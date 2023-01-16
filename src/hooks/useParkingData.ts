@@ -49,10 +49,10 @@ export default function useParkingData() {
   useEffect(() => {
     loadDataFromLocalStorage();
 
-    // fetching new data every 2 minutes
+    // fetching new data every minute
     const fetchingInterval = setInterval(() => {
       getParkingData();
-    }, 120000);
+    }, 60000);
 
     return () => clearInterval(fetchingInterval);
   }, []);
