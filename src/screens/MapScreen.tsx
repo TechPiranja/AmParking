@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import MapView, { Callout, Circle, Marker } from 'react-native-maps';
+import MapView, { Callout, Circle, Marker, Polyline } from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
 import { Box, Icon, IconButton, Text } from 'native-base';
 import useParkingData from '../hooks/useParkingData';
@@ -101,37 +101,55 @@ export default function MapScreen() {
         ))}
         <Circle
           center={userLocation?.coords}
-          radius={settings?.radius}
+          radius={settings?.radius ?? 300}
           fillColor="rgba(6, 172, 244, 0.26)"
           strokeColor="rgba(0, 0, 0, 0)"
         />
-      </MapView>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 160,
-          width: '95%',
-          backgroundColor: '#ddefffce',
-          padding: 10,
-          borderRadius: 10
-        }}>
-        <Text>{'Parkhaus in der Nähe: ' + geofences?.closestRegion?.identifier ?? ''}</Text>
-        <IconButton
-          style={{ position: 'absolute', bottom: -5, right: 5 }}
-          size="lg"
-          icon={<Icon as={Ionicons} name={'navigate'} />}
-          borderRadius="full"
-          onPress={() =>
-            navigateToSpot(
+        {geofences?.closestRegion && userLocation?.coords && settings.pseudoNavigation && (
+          <Polyline
+            coordinates={[
               {
-                latitude: geofences?.closestRegion!.latitude,
-                longitude: geofences?.closestRegion!.longitude
+                latitude: userLocation?.coords.latitude,
+                longitude: userLocation?.coords?.longitude
               },
-              geofences?.closestRegion!.identifier
-            )
-          }
-        />
-      </View>
+              {
+                latitude: geofences?.closestRegion?.latitude,
+                longitude: geofences?.closestRegion?.longitude
+              }
+            ]}
+            strokeWidth={4}
+          />
+        )}
+      </MapView>
+      {geofences?.closestRegion?.identifier && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 160,
+            width: '95%',
+            backgroundColor: '#ddefffce',
+            padding: 10,
+            borderRadius: 10
+          }}>
+          <Text>{'Parkhaus in der Nähe: ' + geofences?.closestRegion?.identifier ?? ''}</Text>
+
+          <IconButton
+            style={{ position: 'absolute', bottom: -5, right: 5 }}
+            size="lg"
+            icon={<Icon as={Ionicons} name={'navigate'} />}
+            borderRadius="full"
+            onPress={() =>
+              navigateToSpot(
+                {
+                  latitude: geofences?.closestRegion!.latitude,
+                  longitude: geofences?.closestRegion!.longitude
+                },
+                geofences?.closestRegion!.identifier
+              )
+            }
+          />
+        </View>
+      )}
       <ParkList
         parkingSpots={parkingSpots}
         moveToCoordinate={moveToCoordinate}

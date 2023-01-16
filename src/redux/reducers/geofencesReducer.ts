@@ -4,7 +4,6 @@ import { LocationRegion } from 'expo-location';
 export const settingsSlice = createSlice({
     name: 'geofences',
     initialState: {
-
         enteredGeofences: [] as any,
         geofencingRegions: [] as any,
         closestRegion: undefined

@@ -4,7 +4,7 @@ import { getDistance } from 'geolib';
 
 // TODO: also get closest wich is OPEN and HAS FREE SPOTS!
 
-export default async function getClosestRegion(geofences: LocationRegion[]) {
+export default async function getClosestRegion(geofences: LocationRegion[], radius: number) {
     let shortestDistance = Number.MAX_VALUE;
     let result = undefined;
 
@@ -17,7 +17,7 @@ export default async function getClosestRegion(geofences: LocationRegion[]) {
             { latitude: lat, longitude: lon },
             { latitude: region.latitude, longitude: region.longitude }
         );
-        if (distance < shortestDistance) {
+        if (distance < shortestDistance && distance <= radius) {
             shortestDistance = distance;
             result = region;
         }

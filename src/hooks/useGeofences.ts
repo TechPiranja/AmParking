@@ -19,11 +19,12 @@ export default function useGeofences() {
   const { notify } = useNotify();
 
   useEffect(() => {
+    Location.stopGeofencingAsync(GEOFENCING);
     Location.startGeofencingAsync(GEOFENCING, geofencingRegions);
   }, [geofencingRegions, loadedPermissions])
 
   async function updateClosestRegion() {
-    dispatch(changeClosestRegion(await getClosestRegion(geofences.enteredGeofences)));
+    dispatch(changeClosestRegion(await getClosestRegion(geofences.enteredGeofences, settings.radius)));
   }
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function useGeofences() {
       dispatch(changeClosestRegion(undefined));
     else
       updateClosestRegion();
+
   }, [geofences.enteredGeofences, userLocation, settings.radius])
 
   useEffect(() => {

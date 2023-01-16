@@ -2,7 +2,11 @@ import { Flex, Input, Switch, Text } from 'native-base';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSpeechVolume, changeRadius } from '../redux/reducers/settingsReducer';
+import {
+  changeSpeechVolume,
+  changeRadius,
+  togglePseudoNavigation
+} from '../redux/reducers/settingsReducer';
 import { SETTINGS } from '../types/Settings';
 import { storeSetting } from '../utils/SettingsStorage';
 
@@ -20,6 +24,11 @@ export default function SettingsScreen() {
     dispatch(changeRadius(radius));
   }
 
+  function setPseudoNavigation(isActive: boolean) {
+    storeSetting(SETTINGS.PseudoNavigation, !isActive);
+    dispatch(togglePseudoNavigation());
+  }
+
   return (
     <View style={styles.container}>
       <Flex direction="row" justifyContent="space-between" style={{ margin: 10 }}>
@@ -27,11 +36,19 @@ export default function SettingsScreen() {
         <Switch size="md" value={settings.speechVolume} onToggle={(x: boolean) => setVolume(x)} />
       </Flex>
       <Flex direction="row" justifyContent="space-between" style={{ margin: 10 }}>
+        <Text fontSize="lg">Pseudo-Navigation</Text>
+        <Switch
+          size="md"
+          value={settings.pseudoNavigation}
+          onToggle={(x: boolean) => setPseudoNavigation(x)}
+        />
+      </Flex>
+      <Flex direction="row" justifyContent="space-between" style={{ margin: 10 }}>
         <Text fontSize="lg">Radius</Text>
         <Input
-          placeholder="Radius in Meter"
           w="40%"
-          value={settings.radius}
+          placeholder="300"
+          value={settings?.radius ?? 300}
           onChangeText={(x: string) => setRadius(Number(x))}
         />
       </Flex>

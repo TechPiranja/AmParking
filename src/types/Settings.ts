@@ -1,4 +1,5 @@
 export enum SETTINGS {
     SpeechVolume = "SpeechVolume",
-    Radius = "Radius"
+    Radius = "Radius",
+    PseudoNavigation = "PseudoNavigation"
 }
