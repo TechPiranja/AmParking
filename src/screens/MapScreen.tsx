@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
-import { Box, Text } from 'native-base';
+import { Box, Icon, IconButton, Text } from 'native-base';
 import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 import ParkList from '../components/ParkList';
@@ -10,6 +10,7 @@ import ParkInfo from '../components/ParkInfo';
 import { LocationRegion } from 'expo-location';
 import useGeofences from '../hooks/useGeofences';
 import { useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function MapScreen() {
   const [mapLocation, setMapLocation] = useState<any>(null);
@@ -114,6 +115,21 @@ export default function MapScreen() {
           borderRadius: 10
         }}>
         <Text>{'Parkhaus in der Nähe: ' + geofences?.closestRegion?.identifier ?? ''}</Text>
+        <IconButton
+          style={{ position: 'absolute', bottom: -5, right: 5 }}
+          size="lg"
+          icon={<Icon as={Ionicons} name={'navigate'} />}
+          borderRadius="full"
+          onPress={() =>
+            navigateToSpot(
+              {
+                latitude: geofences?.closestRegion!.latitude,
+                longitude: geofences?.closestRegion!.longitude
+              },
+              geofences?.closestRegion!.identifier
+            )
+          }
+        />
       </View>
       <ParkList
         parkingSpots={parkingSpots}
