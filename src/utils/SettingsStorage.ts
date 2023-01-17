@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SETTINGS } from '../types/Settings';
 
+// stores the settings in the internal storage
 const storeSetting = async (name: string, setting: any) => {
     try {
         const jsonValue = JSON.stringify(setting)
@@ -10,6 +11,7 @@ const storeSetting = async (name: string, setting: any) => {
     }
 }
 
+// gets the settings from the internal storage
 const getSettings = async (): Promise<any | null | undefined> => {
     try {
         let settings = {} as any;
@@ -24,6 +26,7 @@ const getSettings = async (): Promise<any | null | undefined> => {
     }
 }
 
+// gets specifig setting by name from the internal storage
 const getSetting = async (name: string): Promise<any | null | undefined> => {
     try {
         const jsonValue = await AsyncStorage.getItem('@' + name)

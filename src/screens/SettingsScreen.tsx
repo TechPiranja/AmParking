@@ -10,20 +10,24 @@ import {
 import { SETTINGS } from '../types/Settings';
 import { storeSetting } from '../utils/SettingsStorage';
 
+// the settings screen shows all possible configuration points
 export default function SettingsScreen() {
   const settings = useSelector((state: any) => state.settings);
   const dispatch = useDispatch();
 
+  // sets the volume in the internal storage and redux store
   function setVolume(volume: boolean) {
     storeSetting(SETTINGS.SpeechVolume, volume);
     dispatch(changeSpeechVolume(volume));
   }
 
+  // sets the radius in the internal storage and redux store
   function setRadius(radius: number) {
     storeSetting(SETTINGS.Radius, radius);
     dispatch(changeRadius(radius));
   }
 
+  // sets the pseudoNavigation in the internal storage and redux store
   function setPseudoNavigation(isActive: boolean) {
     storeSetting(SETTINGS.PseudoNavigation, !isActive);
     dispatch(togglePseudoNavigation());

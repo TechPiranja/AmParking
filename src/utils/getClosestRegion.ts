@@ -2,8 +2,7 @@ import * as Location from 'expo-location';
 import { LocationRegion } from 'expo-location';
 import { getDistance } from 'geolib';
 
-// TODO: also get closest wich is OPEN and HAS FREE SPOTS!
-
+// calculates the distances and returns the closestregion or undefined
 export default async function getClosestRegion(geofences: LocationRegion[], radius: number) {
     let shortestDistance = Number.MAX_VALUE;
     let result = undefined;

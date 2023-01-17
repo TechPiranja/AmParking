@@ -1,5 +1,6 @@
 import { ParkingSpotInfo } from "../types/ParkingSpotInfo";
 
+// parses the parkingspot data from xml into the ts object ParkingSpotInfo
 export default function parseToParkingSpots(data: any, currentParkingSpots: ParkingSpotInfo[]): ParkingSpotInfo[] {
     for (const parkingSpotData of data.Daten.Parkhaus) {
         const parkingSpot = currentParkingSpots.find((p) => p.id === parkingSpotData.ID);

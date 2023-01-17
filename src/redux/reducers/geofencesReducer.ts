@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { LocationRegion } from 'expo-location';
 
+// this reducer is responsible for all geofence related data
 export const settingsSlice = createSlice({
     name: 'geofences',
     initialState: {

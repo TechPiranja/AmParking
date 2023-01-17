@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
 
+// stores parkingSpots in internal storage
 const storeParkingSpots = async (parkingSpots: ParkingSpotInfo[]) => {
     try {
         const jsonValue = JSON.stringify(parkingSpots)
@@ -10,6 +11,7 @@ const storeParkingSpots = async (parkingSpots: ParkingSpotInfo[]) => {
     }
 }
 
+// changes favorite status of a parkingspot in the internal storage
 const changeIsFavorite = async (id: number, isFavorite: boolean): Promise<ParkingSpotInfo[] | null | undefined> => {
     const parkingSpots = await getParkingSpots();
     const getItem = parkingSpots?.find((x: ParkingSpotInfo) => x.id == id);
@@ -24,6 +26,7 @@ const changeIsFavorite = async (id: number, isFavorite: boolean): Promise<Parkin
     return parkingSpots;
 }
 
+// gets all parkingspots from internal storage
 const getParkingSpots = async (): Promise<ParkingSpotInfo[] | null | undefined> => {
     try {
         const jsonValue = await AsyncStorage.getItem('@parkingSpots')

@@ -6,6 +6,7 @@ import ListScreen from '../screens/ListScreen';
 import DetailedParkInfo from '../components/DetailedParkInfo';
 import { createStackNavigator } from '@react-navigation/stack';
 
+// the liststack contains the parkingspot list and the detailed view
 const ListStack = createStackNavigator();
 function ListStackScreen() {
   return (
@@ -22,6 +23,7 @@ function ListStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
+// the bottomtabs show the menu points of the app and allows navigating between them
 export default function BottomTabs() {
   return (
     <Tab.Navigator

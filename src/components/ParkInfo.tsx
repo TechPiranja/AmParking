@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Icon, IconButton, Text } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
@@ -10,6 +10,7 @@ interface ParkInfoProps {
   navigateToSpot: any;
 }
 
+// simple parking info which is beeing used in the map screen
 export default function ParkInfo({ parkingSpotInfo, changeSpot, navigateToSpot }: ParkInfoProps) {
   return (
     <View style={{ width: 140 }}>
@@ -27,9 +28,6 @@ export default function ParkInfo({ parkingSpotInfo, changeSpot, navigateToSpot }
         <Text bold>Trend: </Text>{' '}
         <Icon as={Ionicons} name={parkingSpotInfo?.trend ? 'trending-down' : 'trending-up'} />
       </Text>
-      {/* <Text>
-    <Text bold>Status: </Text> {parkingSpotInfo?.state?.toString() ?? 'no data'}
-  </Text> */}
 
       <Text bold style={{ color: parkingSpotInfo?.closed ? 'red' : 'green' }}>
         {parkingSpotInfo.closed ? 'Geschlossen' : 'Offen'}

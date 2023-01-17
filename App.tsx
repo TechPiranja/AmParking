@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
 import BottomTabs from './src/navigation/BottomTabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeBaseProvider } from 'native-base';
 import { Provider } from 'react-redux';
 import configureStore from './src/redux/store/configureStore';
 
+// enables the redux store
 const store = configureStore;
 
+// the nativebaseprovider is needed in order to use the native base design system
 export default function App() {
   return (
     <Provider store={store}>
@@ -20,12 +21,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});

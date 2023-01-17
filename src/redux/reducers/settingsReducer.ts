@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// the settings reduces is responsible for all setting related data
 export const settingsSlice = createSlice({
     name: 'settings',
     initialState: {

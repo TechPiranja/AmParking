@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import DetailedParkList from '../components/DetailedParkList';
 
+// this screen show the detailed parkinglist
 export default function ListScreen() {
   return (
     <View style={styles.container}>
