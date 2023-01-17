@@ -57,8 +57,10 @@ export default function useGeofences() {
   // if the location permissions are set, we can start the geofencing task
   useEffect(() => {
     // since the regions can change due to the radius setting, we need to stop the old geofencing task before starting the new one
-    Location.stopGeofencingAsync(GEOFENCING);
-    Location.startGeofencingAsync(GEOFENCING, geofencingRegions);
+    if (permissionStatus) {
+      Location.stopGeofencingAsync(GEOFENCING);
+      Location.startGeofencingAsync(GEOFENCING, geofencingRegions);
+    }
   }, [geofencingRegions, loadedPermissions])
 
   // this function updates the closestparkingSpot in the internal redux store

@@ -11,7 +11,7 @@ const ListStack = createStackNavigator();
 function ListStackScreen() {
   return (
     <ListStack.Navigator>
-      <ListStack.Screen name="Liste" component={ListScreen} />
+      <ListStack.Screen name="Liste " component={ListScreen} />
       <ListStack.Screen
         name="Parkdetails"
         component={DetailedParkInfo}
