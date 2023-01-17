@@ -26,15 +26,18 @@ export default function MapScreen() {
   let mapRef = useRef<any>(null);
   const isFocused = useIsFocused();
 
+  // everytime the hook updates data, the component data gets updated too
   useEffect(() => {
     setSpots(parkingSpots);
   }, [parkingSpots]);
 
+  // gets data from storage and sets it in component
   async function getInitialData() {
     const data = await getParkingSpots();
     if (data) setSpots(data);
   }
 
+  // when the screen gets the focus, data will be loaded from storage
   useEffect(() => {
     getInitialData();
   }, [isFocused]);
