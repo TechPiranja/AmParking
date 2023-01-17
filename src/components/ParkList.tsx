@@ -9,11 +9,12 @@ interface ItemProp {
   x: ParkingSpotInfo;
   moveToCoordinate: any;
   navigateToSpot: any;
+  changeSpot: any;
 }
 
-const Item = ({ x, moveToCoordinate, navigateToSpot }: ItemProp) => (
+const Item = ({ x, moveToCoordinate, navigateToSpot, changeSpot }: ItemProp) => (
   <TouchableOpacity style={styles.item} onPress={() => moveToCoordinate(x)}>
-    <ParkInfo parkingSpotInfo={x} navigateToSpot={navigateToSpot} />
+    <ParkInfo parkingSpotInfo={x} navigateToSpot={navigateToSpot} changeSpot={changeSpot} />
   </TouchableOpacity>
 );
 
@@ -32,7 +33,12 @@ export default function ParkList({
   navigateToSpot
 }: ParkListProps) {
   const renderItem = ({ item }: any) => (
-    <Item x={item} moveToCoordinate={moveToCoordinate} navigateToSpot={navigateToSpot} />
+    <Item
+      x={item}
+      moveToCoordinate={moveToCoordinate}
+      navigateToSpot={navigateToSpot}
+      changeSpot={changeSpot}
+    />
   );
 
   return (

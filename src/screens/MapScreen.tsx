@@ -11,16 +11,33 @@ import { LocationRegion } from 'expo-location';
 import useGeofences from '../hooks/useGeofences';
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
+import { getParkingSpots } from '../utils/ParkingSpotStorage';
+import { useIsFocused } from '@react-navigation/native';
 
 // the mapscreen shows map related data about the parkingspots
 export default function MapScreen() {
   const [mapLocation, setMapLocation] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { parkingSpots, changeSpot, navigateToSpot } = useParkingData();
+  const [spots, setSpots] = useState<ParkingSpotInfo[]>([]);
   const { setGeofencingRegions, userLocation, permissionStatus } = useGeofences();
   const geofences = useSelector((state: any) => state.geofences);
   const settings = useSelector((state: any) => state.settings);
   let mapRef = useRef<any>(null);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setSpots(parkingSpots);
+  }, [parkingSpots]);
+
+  async function getInitialData() {
+    const data = await getParkingSpots();
+    if (data) setSpots(data);
+  }
+
+  useEffect(() => {
+    getInitialData();
+  }, [isFocused]);
 
   // every time the user location changes, the map location changes also
   // this is needed in order to center the map on the user
@@ -34,7 +51,7 @@ export default function MapScreen() {
   useEffect(() => {
     if (loading === false) {
       const regions: LocationRegion[] = [];
-      parkingSpots.map((x: ParkingSpotInfo) =>
+      spots.map((x: ParkingSpotInfo) =>
         regions.push({
           identifier: x.name,
           latitude: x.latitude,
@@ -81,7 +98,7 @@ export default function MapScreen() {
           showsUserLocation
           showsCompass
           showsScale>
-          {parkingSpots?.map((x: ParkingSpotInfo) => (
+          {spots?.map((x: ParkingSpotInfo) => (
             <Marker
               key={x.id}
               onPress={() => moveToCoordinate(x)}
@@ -100,7 +117,11 @@ export default function MapScreen() {
                 </Text>
               </Box>
               <Callout>
-                <ParkInfo parkingSpotInfo={x} navigateToSpot={navigateToSpot} />
+                <ParkInfo
+                  parkingSpotInfo={x}
+                  navigateToSpot={navigateToSpot}
+                  changeSpot={changeSpot}
+                />
               </Callout>
             </Marker>
           ))}
@@ -173,7 +194,7 @@ export default function MapScreen() {
         </View>
       )}
       <ParkList
-        parkingSpots={parkingSpots}
+        parkingSpots={spots}
         moveToCoordinate={moveToCoordinate}
         changeSpot={changeSpot}
         navigateToSpot={navigateToSpot}

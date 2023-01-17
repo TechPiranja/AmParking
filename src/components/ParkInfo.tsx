@@ -7,10 +7,11 @@ import { View } from 'react-native';
 interface ParkInfoProps {
   parkingSpotInfo: ParkingSpotInfo;
   navigateToSpot: any;
+  changeSpot: any;
 }
 
 // simple parking info which is beeing used in the map screen
-export default function ParkInfo({ parkingSpotInfo, navigateToSpot }: ParkInfoProps) {
+export default function ParkInfo({ parkingSpotInfo, navigateToSpot, changeSpot }: ParkInfoProps) {
   return (
     <View style={{ width: 140 }}>
       <Text fontSize="md" bold>
@@ -32,7 +33,14 @@ export default function ParkInfo({ parkingSpotInfo, navigateToSpot }: ParkInfoPr
         {parkingSpotInfo.closed ? 'Geschlossen' : 'Offen'}
       </Text>
       <IconButton
-        style={{ position: 'absolute', bottom: -10, right: -5 }}
+        style={{ position: 'absolute', bottom: -10, right: -10 }}
+        size="lg"
+        icon={<Icon as={Ionicons} name={parkingSpotInfo?.isFavorite ? 'star' : 'star-outline'} />}
+        borderRadius="full"
+        onPress={() => changeSpot(parkingSpotInfo.id, !parkingSpotInfo.isFavorite ?? true)}
+      />
+      <IconButton
+        style={{ position: 'absolute', bottom: -10, right: 25 }}
         size="lg"
         icon={<Icon as={Ionicons} name={'navigate'} />}
         borderRadius="full"

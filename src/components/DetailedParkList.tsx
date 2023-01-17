@@ -1,10 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { FlatList, Icon, IconButton } from 'native-base';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import useParkingData from '../hooks/useParkingData';
 import { ParkingSpotInfo } from '../types/ParkingSpotInfo';
+import useGeofences from '../hooks/useGeofences';
+import { useIsFocused } from '@react-navigation/native';
+import { getParkingSpots } from '../utils/ParkingSpotStorage';
 
 interface ItemProp {
   x: ParkingSpotInfo;
@@ -43,6 +46,21 @@ const ItemDivider = () => {
 export default function DetailedParkList() {
   const navigation = useNavigation();
   const { parkingSpots, changeSpot } = useParkingData();
+  const [spots, setSpots] = useState<ParkingSpotInfo[]>([]);
+  const {} = useGeofences();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setSpots(parkingSpots);
+  }, [parkingSpots]);
+
+  async function getInitialData() {
+    const data = await getParkingSpots();
+    if (data) setSpots(data);
+  }
+  useEffect(() => {
+    getInitialData();
+  }, [isFocused]);
 
   // this is used by the flatlist in order to render the items
   const renderItem = ({ item }: any) => (
@@ -51,7 +69,7 @@ export default function DetailedParkList() {
 
   return (
     <FlatList
-      data={parkingSpots?.sort(
+      data={spots?.sort(
         (a: ParkingSpotInfo, b: ParkingSpotInfo) => Number(b!.isFavorite) - Number(a!.isFavorite)
       )}
       ItemSeparatorComponent={ItemDivider}

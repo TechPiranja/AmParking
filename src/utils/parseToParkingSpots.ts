@@ -14,6 +14,5 @@ export default function parseToParkingSpots(data: any, currentParkingSpots: Park
             parkingSpot.isFavorite = parkingSpot.isFavorite ?? false;
         }
     }
-
     return currentParkingSpots;
 }

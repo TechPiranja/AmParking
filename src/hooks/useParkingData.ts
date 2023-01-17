@@ -12,12 +12,13 @@ export default function useParkingData() {
   const [parkingSpots, setParkingSpots] = useState<ParkingSpotInfo[]>(parkingSpotsData);
 
   // getting the data and parsing it into the correct type
-  function getParkingData(initial?: ParkingSpotInfo[]) {
+  async function getParkingData(initial?: ParkingSpotInfo[]) {
+    const storage = await getParkingSpots();
     axios
       .get('https://parken.amberg.de/wp-content/uploads/pls/pls.xml')
       .then((response) => {
         let data = new XMLParser().parse(response.data);
-        let parsedData = parseToParkingSpots(data, initial ?? parkingSpots!);
+        let parsedData = parseToParkingSpots(data, initial ?? storage!);
         parsedData = parsedData.sort((a: ParkingSpotInfo, b: ParkingSpotInfo) => a.name < b.name ? -1 : 1);
         setParkingSpots([...parsedData]);
         storeParkingSpots(parsedData);
@@ -27,7 +28,11 @@ export default function useParkingData() {
   // loads the data initially
   async function loadDataFromLocalStorage() {
     const data = await getParkingSpots();
-    setParkingSpots(data!);
+    if (data === null || data === undefined) {
+      storeParkingSpots(parkingSpots);
+    } else {
+      setParkingSpots(data!);
+    }
     getParkingData(data!);
   }
 
